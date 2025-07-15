@@ -1,0 +1,18 @@
+[workspace]
+authors = ["Chris Hoge <hoge@modular.com>"]
+channels = ["https://conda.modular.com/max-nightly",
+            "conda-forge",
+            "https://prefix.dev/conda-forge"]
+name = "gpt2"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+serve = "max serve --model-path openai-community/gpt2 --custom-architectures gpt2"
+generate = "max generate --model-path openai-community/gpt2 --custom-architectures gpt2 --prompt 'Generate a story about a robot'"
+test-serve = "test/test-serve.sh"
+
+[dependencies]
+pytorch = "*"
+modular = "*"
+numpy = ">=2.3.1,<3"
