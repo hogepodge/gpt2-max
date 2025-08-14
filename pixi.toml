@@ -10,7 +10,7 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-pytorch = "*"
-modular = "*"
-numpy = ">=2.3.1,<3"
-safetensors = ">=0.5.3,<0.6"
+pytorch = ">=2.8.0,<3"
+modular = ">=25.6.0.dev2025081318,<26"
+numpy = ">=2.3.2,<3"
+safetensors = ">=0.6.2,<0.7"

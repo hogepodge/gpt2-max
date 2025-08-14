@@ -5,7 +5,6 @@ from typing import Any
 from collections.abc import Sequence
 
 
-
 @dataclass
 class WeightDict:
     """A dataclass that is designed to hold a map safetensor weights

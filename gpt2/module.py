@@ -1,6 +1,6 @@
 from gpt2.weights import WeightDict
-from max.graph import ops, TensorValue
-from gpt2.tensor import Tensor
+from max.graph import ops, TensorValue, TensorType, Graph
+from max.experimental.tensor import Tensor
 
 class Module:
     def named_children(self):
