@@ -7,7 +7,6 @@ class Linear(Module):
     bias: TensorValueLike = 0
 
     def __init__(self, in_dim, out_dim, *, bias: bool = True, dtype, device):
-        print(dtype)
         self.weight = Tensor.zeros([in_dim, out_dim], dtype, device)
         self.bias = Tensor.zeros([out_dim], dtype, device) if bias else 0
 

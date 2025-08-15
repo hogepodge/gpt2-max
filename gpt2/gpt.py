@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from functools import partial, reduce
 from typing import Any
 
+from encoder import GPT2Encoder
+
 import safetensors
 from max.driver import CPU, Accelerator, accelerator_count
 from max.dtype import DType
@@ -351,11 +353,19 @@ if __name__ == "__main__":
         model.load_state_dict(state)
         graph.output(model(*graph.inputs))
 
-    session = InferenceSession()
-    weights = {name: state[name] for name, _ in model.named_parameters()}
-    compiled = session.load(graph, weights_registry=weights)
-    input = Tensor.zeros([1, 1], DType.int64, device)
-    asyncio.run(input.realize)
-    i = input.driver_tensor
-    results = compiled(i)
-    print(Tensor(storage=results[0]))
+        session = InferenceSession()
+        weights = {name: state[name] for name, _ in model.named_parameters()}
+        compiled = session.load(graph, weights_registry=weights)
+
+        encoder = GPT2Encoder()
+        input = encoder.encode("The quick brown fox jumps over", device)
+
+        # input = Tensor.zeros([1, 1], DType.int64, device)
+        asyncio.run(input.realize)
+        print(input)
+
+        i = input.driver_tensor
+        results = compiled(i)
+        print(encoder.decode(Tensor(storage=results[0])))
+
+        #print(Tensor(storage=results[0]))

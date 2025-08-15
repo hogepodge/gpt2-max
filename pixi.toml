@@ -3,7 +3,7 @@ authors = ["Chris Hoge <hoge@modular.com>"]
 channels = ["https://conda.modular.com/max-nightly",
             "conda-forge",
             "https://prefix.dev/conda-forge"]
-name = "gpt2"
+name = "gpt2max"
 platforms = ["osx-arm64"]
 version = "0.1.0"
 
@@ -11,6 +11,7 @@ version = "0.1.0"
 
 [dependencies]
 pytorch = ">=2.8.0,<3"
-modular = ">=25.6.0.dev2025081318,<26"
+modular = ">=25.6.0.dev2025081405,<26"
 numpy = ">=2.3.2,<3"
 safetensors = ">=0.6.2,<0.7"
+tiktoken = ">=0.9.0,<0.10"

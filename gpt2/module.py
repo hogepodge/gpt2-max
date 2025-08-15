@@ -1,21 +1,19 @@
-from gpt2.weights import WeightDict
 from max.graph import ops, TensorValue, TensorType, Graph
 from max.experimental.tensor import Tensor
 
 class Module:
     def named_children(self):
-        """Lists all of the named children in the Module"""
         for name, attr in vars(self).items():
             if isinstance(attr, (Module, Tensor, TensorValue)):
                 yield name, attr
 
-    def load_weight_dict(self, weights, path=()):
+    def load_state_dict(self, state, path=()):
         for name, value in self.named_children():
             if isinstance(value, Module):
-                value.load_weight_dict(weights, (*path, name))
+                value.load_state_dict(state, (*path, name))
             else:
                 qualname = ".".join((*path, name))
-                assert qualname in weights, f"{qualname} not found in weights"
+                assert qualname in state, f"{qualname} not found in state"
                 weight = ops.constant_external(name=qualname, type=value.type)
                 setattr(self, name, weight)
 

@@ -1,5 +1,5 @@
 import unittest
-from gpt2.weights import load_safetensors, WeightDict
+from gpt2.statedict import load_safetensors, StateDict
 from gpt2.linear import Linear
 from max.dtype import DType
 from max.driver import CPU, Accelerator, accelerator_count
