@@ -14,9 +14,7 @@ class GPT2Encoder:
         return Tensor.constant(encoded, DType.int64, device).reshape([1,l])
     
     def decode(self, logits: Tensor):
-        
-        logits = logits[-1, 5, :]
-        print(logits.shape)
+        logits = logits[:, -1, :]
         m = logits.argmax()
         v = m.item()
         return self.tokenizer.decode([v])

@@ -358,14 +358,25 @@ if __name__ == "__main__":
         compiled = session.load(graph, weights_registry=weights)
 
         encoder = GPT2Encoder()
-        input = encoder.encode("The quick brown fox jumps over", device)
 
-        # input = Tensor.zeros([1, 1], DType.int64, device)
-        asyncio.run(input.realize)
-        print(input)
+        context = "The quick brown fox jump over"
 
-        i = input.driver_tensor
-        results = compiled(i)
-        print(encoder.decode(Tensor(storage=results[0])))
+        for i in range(20):
+
+
+            input = encoder.encode(context, device)
+
+            # input = Tensor.zeros([1, 1], DType.int64, device)
+            asyncio.run(input.realize)
+            print(input)
+
+            i = input.driver_tensor
+
+            results = compiled(i)
+
+            next = encoder.decode(Tensor(storage=results[0]))
+            print(next)
+            context = context + next
+
 
         #print(Tensor(storage=results[0]))

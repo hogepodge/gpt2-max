@@ -24,7 +24,8 @@ from gpt2.encoder import GPT2Encoder
 from gpt2.statedict import StateDict
 from gpt2.module import Module
 
-from tests.pytorch_weights import load_state_dict, assign
+from tests.pytorch_weights import load_state_dict
+from tests.pytorch_gpt2 import GPTModel
 from torch.nn import Embedding as TorchEmbedding
 from torch import tensor as torchtensor
 import torch
@@ -63,20 +64,6 @@ class GPT2PartialEmbeddings(Module):
                 device=in_idx.device,
             )
         )
-        x = tok_embeds + pos_embeds  # Shape [batch_size, num_tokens, emb_size]
-        return x
-    
-class TorchGPTPartial(TorchModule):
-
-    def __init__(self, cfg):
-        super().__init__()
-        self.tok_emb = TorchEmbedding(cfg["vocab_size"], cfg["emb_dim"])
-        self.pos_emb = TorchEmbedding(cfg["context_length"], cfg["emb_dim"])
-
-    def forward(self, in_idx):
-        batch_size, seq_len = in_idx.shape
-        tok_embeds = self.tok_emb(in_idx)
-        pos_embeds = self.pos_emb(torch.arange(seq_len, device=in_idx.device))
         x = tok_embeds + pos_embeds  # Shape [batch_size, num_tokens, emb_size]
         return x
 
@@ -158,23 +145,23 @@ class TestEmbedding(unittest.TestCase):
             "emb_dim": 768,          # Embedding dimension
             "n_heads": 12,           # Number of attention heads
             "n_layers": 12,          # Number of layers
-            "drop_rate": 0.1,        # Dropout rate
-            "qkv_bias": False        # Query-Key-Value bias
+            "drop_rate": 0.0,        # Dropout rate
+            "qkv_bias": True        # Query-Key-Value bias
         }
 
-        torchmodel = TorchGPTPartial(GPT_CONFIG_124M)
+        torchmodel = GPTModel(GPT_CONFIG_124M)
 
         w = load_state_dict()
-        torchmodel.pos_emb.weight = assign(torchmodel.pos_emb.weight, w["wpe.weight"])
-        torchmodel.tok_emb.weight = assign(torchmodel.tok_emb.weight, w["wte.weight"])
-
+        torchmodel.load_weights(w)
+        
         tokenizer = tiktoken.get_encoding("gpt2")
         encoded = tokenizer.encode("The quick brown fox jumps over")
         encoded_tensor = torchtensor(encoded).unsqueeze(0)
+        print(encoded_tensor)
 
         torch_result = torchmodel(encoded_tensor)
 
-        assert(numpy.allclose(torch_result.detach().numpy(), max_result))
+        assert(numpy.allclose(torchmodel.embedding_checkpoint.detach().numpy(), max_result))
 
   
 
