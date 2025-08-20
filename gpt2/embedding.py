@@ -1,4 +1,4 @@
-from gpt2.module import Module
+from module import Module
 from max.graph import TensorValueLike, ops
 from max.experimental.tensor import Tensor
 

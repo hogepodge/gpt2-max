@@ -25,3 +25,10 @@ class Module:
                 for subname, parameter in attr.named_parameters():
                     yield f"{name}.{subname}", parameter
 
+
+class ModuleList(list, Module):
+    def named_children(self):
+        for i, attr in enumerate(self):
+            if isinstance(attr, (Module, Tensor, TensorValue)):
+                yield (str(i), attr)
+

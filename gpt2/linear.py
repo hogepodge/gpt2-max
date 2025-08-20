@@ -1,6 +1,7 @@
-from gpt2.module import Module
+from module import Module
 from max.experimental.tensor import Tensor
 from max.graph import ops, TensorValue, TensorValueLike
+
 
 class Linear(Module):
     weight: TensorValueLike
@@ -20,4 +21,3 @@ class Linear(Module):
 
     def __call__(self, x):
         return x @ self.weight + self.bias
-    
